@@ -43,6 +43,7 @@
     ```
 - #### 3. Установка зависимостей
     ```bash
+    cd test_dds_system
     cd dds_management
     cd dds_management_system
     pip install -r requirements.txt
