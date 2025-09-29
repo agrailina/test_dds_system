@@ -1,0 +1,33 @@
+{% extends 'dds_app/base.html' %}
+
+{% block title %}Удаление {{ verbose_name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-trash"></i> Удаление {{ verbose_name }}</h4>
+            </div>
+            <div class="card-body">
+                <p>Вы уверены, что хотите удалить "{{ item }}"?</p>
+                
+                {% if model_name == 'category' or model_name == 'subcategory' %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Внимание!</strong> Это действие может затронуть связанные транзакции.
+                </div>
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'dictionaries' %}" class="btn btn-secondary">Отмена</a>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

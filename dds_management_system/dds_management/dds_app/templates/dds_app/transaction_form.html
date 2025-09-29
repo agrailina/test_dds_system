@@ -1,0 +1,127 @@
+{% extends 'dds_app/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-{% if transaction %}edit{% else %}plus{% endif %}"></i> {{ title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'transaction_list' %}" class="btn btn-secondary">Отмена</a>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const typeSelect = document.getElementById('id_transaction_type');
+    const categorySelect = document.getElementById('id_category');
+    const subcategorySelect = document.getElementById('id_subcategory');
+    
+    // Функция для загрузки категорий по типу операции
+    function loadCategories() {
+        const typeId = typeSelect.value;
+        if (typeId) {
+            fetch(`/api/categories/by-type/?transaction_type_id=${typeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const currentValue = categorySelect.value;
+                    categorySelect.innerHTML = '<option value="">Выберите категорию</option>';
+                    data.forEach(cat => {
+                        const option = document.createElement('option');
+                        option.value = cat.id;
+                        option.textContent = cat.name;
+                        categorySelect.appendChild(option);
+                    });
+                    
+                    // Восстанавливаем предыдущее значение, если оно есть в новых опциях
+                    if (currentValue) {
+                        categorySelect.value = currentValue;
+                    }
+                    
+                    // Загружаем подкатегории для выбранной категории
+                    loadSubcategories();
+                })
+                .catch(error => {
+                    console.error('Error loading categories:', error);
+                    categorySelect.innerHTML = '<option value="">Ошибка загрузки</option>';
+                });
+        } else {
+            categorySelect.innerHTML = '<option value="">Сначала выберите тип операции</option>';
+            subcategorySelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+        }
+    }
+    
+    // Функция для загрузки подкатегорий по категории
+    function loadSubcategories() {
+        const categoryId = categorySelect.value;
+        if (categoryId) {
+            fetch(`/api/subcategories/by-category/?category_id=${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const currentValue = subcategorySelect.value;
+                    subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
+                    data.forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub.id;
+                        option.textContent = sub.name;
+                        subcategorySelect.appendChild(option);
+                    });
+                    
+                    // Восстанавливаем предыдущее значение, если оно есть в новых опциях
+                    if (currentValue) {
+                        subcategorySelect.value = currentValue;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading subcategories:', error);
+                    subcategorySelect.innerHTML = '<option value="">Ошибка загрузки</option>';
+                });
+        } else {
+            subcategorySelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+        }
+    }
+    
+    // Обработчики событий
+    typeSelect.addEventListener('change', loadCategories);
+    categorySelect.addEventListener('change', loadSubcategories);
+    
+    // Инициализация при загрузке страницы
+    function initializeForm() {
+        // Очищаем категории и подкатегории при загрузке
+        categorySelect.innerHTML = '<option value="">Сначала выберите тип операции</option>';
+        subcategorySelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+        
+        // Если тип операции уже выбран (при редактировании), загружаем соответствующие категории
+        if (typeSelect.value) {
+            loadCategories();
+        }
+    }
+    
+    initializeForm();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends 'dds_app/base.html' %}
+
+{% block title %}Справочники{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-book"></i> Справочники</h1>
+</div>
+
+<div class="row">
+    <!-- Статусы -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Статусы</h5>
+                <a href="{% url 'add_dictionary_item' 'status' %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> Добавить
+                </a>
+            </div>
+            <div class="card-body">
+                {% if statuses %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for status in statuses %}
+                                    <tr>
+                                        <td>{{ status.name }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'edit_dictionary_item' 'status' status.pk %}" class="btn btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{% url 'delete_dictionary_item' 'status' status.pk %}" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Статусы не добавлены</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Типы операций -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Типы операций</h5>
+                <a href="{% url 'add_dictionary_item' 'transaction_type' %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> Добавить
+                </a>
+            </div>
+            <div class="card-body">
+                {% if transaction_types %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for type in transaction_types %}
+                                    <tr>
+                                        <td>{{ type.name }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'edit_dictionary_item' 'transaction_type' type.pk %}" class="btn btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{% url 'delete_dictionary_item' 'transaction_type' type.pk %}" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Типы операций не добавлены</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Категории -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Категории</h5>
+                <a href="{% url 'add_dictionary_item' 'category' %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> Добавить
+                </a>
+            </div>
+            <div class="card-body">
+                {% if categories %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Тип операции</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category in categories %}
+                                    <tr>
+                                        <td>{{ category.name }}</td>
+                                        <td>{{ category.transaction_type }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'edit_dictionary_item' 'category' category.pk %}" class="btn btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{% url 'delete_dictionary_item' 'category' category.pk %}" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Категории не добавлены</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Подкатегории -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Подкатегории</h5>
+                <a href="{% url 'add_dictionary_item' 'subcategory' %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> Добавить
+                </a>
+            </div>
+            <div class="card-body">
+                {% if subcategories %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Категория</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subcategory in subcategories %}
+                                    <tr>
+                                        <td>{{ subcategory.name }}</td>
+                                        <td>{{ subcategory.category }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'edit_dictionary_item' 'subcategory' subcategory.pk %}" class="btn btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{% url 'delete_dictionary_item' 'subcategory' subcategory.pk %}" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Подкатегории не добавлены</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
