@@ -44,8 +44,8 @@
 - #### 3. Установка зависимостей
     ```bash
     cd test_dds_system
-    cd dds_management
     cd dds_management_system
+    cd dds_management
     pip install -r requirements.txt
     ```
 - #### 4. Настройка базы данных
